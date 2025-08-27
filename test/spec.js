@@ -62,6 +62,7 @@ describe('spec', () => {
         called = true;
         res.end('');
       });
+      req.resume();
     });
 
     await expect(handler(null)).to.be.fulfilled;
@@ -300,6 +301,10 @@ describe('spec', () => {
     delete requestV2.requestContext;
     delete requestV1.apiGateway;
     delete requestV2.apiGateway;
+    requestV1._readableState.buffer = [];
+    requestV1._readableState.length = 0;
+    requestV2._readableState.buffer = [];
+    requestV2._readableState.length = 0;
 
     expect(JSON.stringify(requestV1)).to.equal(JSON.stringify(requestV2));
   });
